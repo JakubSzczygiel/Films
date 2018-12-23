@@ -3,7 +3,7 @@ import java.util.Objects;
 public class Director {
     public String directorName;
     public String directorLastName;
-    int numberOfOscars;
+    transient int numberOfOscars;
 
 
     public Director(String directorName, String directorLastName) {
