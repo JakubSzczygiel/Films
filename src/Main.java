@@ -8,19 +8,17 @@ public class Main {
         UrlReader urlReader = new UrlReader(url);
         JsonWriter jsonWriter = new JsonWriter();
         JsonReader jsonReader = new JsonReader();
-        ListOperations listOperations=new ListOperations();
+        ListOperations listOperations = new ListOperations();
         List<Film> films;
         List<Film> filmsReadFromJson;
         List<Director> directors;
 
         try {
-            films=urlReader.getFilmsList();
+            films = urlReader.getFilmsList();
             jsonWriter.writeToJson(films, jsonFilePath);
-
-            filmsReadFromJson=jsonReader.readFromJson(jsonFilePath);
-            directors=listOperations.extractDirectorsFromList(filmsReadFromJson);
+            filmsReadFromJson = jsonReader.readFromJson(jsonFilePath);
+            directors = listOperations.extractDirectorsFromList(filmsReadFromJson);
             listOperations.printMostPopularDirector(directors);
-
 
         } catch (IOException e) {
             e.printStackTrace();

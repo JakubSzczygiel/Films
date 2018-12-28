@@ -11,5 +11,6 @@ public class JsonWriter {
         FileWriter writer = new FileWriter(path);
         writer.write(json);
         writer.close();
+
     }
 }
