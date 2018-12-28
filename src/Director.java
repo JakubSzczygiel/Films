@@ -3,7 +3,6 @@ import java.util.Objects;
 public class Director {
     public String directorName;
     public String directorLastName;
-    transient int numberOfOscars;
 
 
     public Director(String directorName, String directorLastName) {
@@ -27,6 +26,6 @@ public class Director {
 
     @Override
     public String toString() {
-        return directorName + " " + directorLastName + " " + numberOfOscars;
+        return directorName + " " + directorLastName;
     }
 }

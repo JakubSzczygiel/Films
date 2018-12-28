@@ -1,4 +1,8 @@
 import com.google.gson.Gson;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,14 +13,26 @@ import java.util.List;
 
 public class JsonReader {
 
-    public List<Film> readFromJson(String path) throws IOException {
+    public List<Film> readFilmsFromJson(String path) throws IOException {
         Reader reader = new FileReader(path);
         List<Film> films = new ArrayList<>();
         Gson gson = new Gson();
         Film[] filmArray = gson.fromJson(reader, Film[].class);
         Collections.addAll(films, filmArray);
-        //System.out.println("Read from JSON \n" + films);
         return films;
     }
 
+    public List<Director> readDirectorsFromJson(String path) throws IOException {
+        ListOperations listOperations = new ListOperations();
+        List<Film> films;
+        List<Director> directors;
+
+        films = readFilmsFromJson(path);
+        directors = listOperations.extractDirectorsFromList(films);
+        return directors;
+    }
+
 }
+
+
+

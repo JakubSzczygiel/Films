@@ -10,15 +10,14 @@ public class Main {
         JsonReader jsonReader = new JsonReader();
         ListOperations listOperations = new ListOperations();
         List<Film> films;
-        List<Film> filmsReadFromJson;
-        List<Director> directors;
+        List<Director> directorsReadFromJson;
+
 
         try {
             films = urlReader.getFilmsList();
             jsonWriter.writeToJson(films, jsonFilePath);
-            filmsReadFromJson = jsonReader.readFromJson(jsonFilePath);
-            directors = listOperations.extractDirectorsFromList(filmsReadFromJson);
-            listOperations.printMostPopularDirector(directors);
+            directorsReadFromJson = jsonReader.readDirectorsFromJson(jsonFilePath);
+            listOperations.printMostPopularDirector(directorsReadFromJson);
 
         } catch (IOException e) {
             e.printStackTrace();

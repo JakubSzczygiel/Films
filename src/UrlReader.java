@@ -19,15 +19,15 @@ public class UrlReader {
 
     public List getFilmsList() throws IOException {
         Document doc = Jsoup.connect(url).get();
-        Elements textLines = doc.select("font");
+        Elements textEntries = doc.select("font");
         int iterator = 0;
-        for (int i = 0; i < textLines.size(); i++) {
-            Element textLine = textLines.get(i);
-            if (textLine.text().equals(String.valueOf(YEAR_OF_FIRST_FILM_PRODUCTION + iterator))) {
+        for (int i = 0; i < textEntries.size(); i++) {
+            Element textEntry = textEntries.get(i);
+            if (textEntry.text().equals(String.valueOf(YEAR_OF_FIRST_FILM_PRODUCTION + iterator))) {
                 iterator++;
-                int filmYear = Integer.parseInt(textLine.text());
-                String filmName = textLines.get(i + 1).text();
-                String[] directors = returnDirectorString(textLines.get(i + 2).text().split(" "));
+                int filmYear = Integer.parseInt(textEntry.text());
+                String filmName = textEntries.get(i + 1).text();
+                String[] directors = returnDirectorString(textEntries.get(i + 2).text().split(" "));
                 String directorName = directors[0];
                 String directorLastName = directors[1];
                 films.add(new Film(filmYear, filmName, directorName, directorLastName));
