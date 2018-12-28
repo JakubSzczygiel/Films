@@ -21,6 +21,7 @@ public class UrlReader {
         int x = 0;
         for (int i = 0; i < links.size(); i++) {
             Element link = links.get(i);
+           // System.out.println(link.text());
             if (link.text().equals(String.valueOf(1960 + x))) {
                 x++;
                 /*link.text() - it is date of production; links.get(i+1) - it is name of a film; links.get(i+2) - it is a director */
@@ -38,9 +39,8 @@ public class UrlReader {
                     films.add(new Film(Integer.parseInt(link.text()), links.get(i + 1).text(), director[0], director[1]));
                 }
             }
-
         }
-        //System.out.println(films);
+       // System.out.println(films);
         return films;
     }
 }

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,10 +9,17 @@ public class Main {
         JsonWriter jsonWriter = new JsonWriter();
         JsonReader jsonReader = new JsonReader();
         ListOperations listOperations=new ListOperations();
+        List<Film> films;
+        List<Film> filmsReadFromJson;
+        List<Director> directors;
 
         try {
-            jsonWriter.writeToJson(urlReader.getFilmsList(), jsonFilePath);
-            listOperations.printMostPopularDirector(listOperations.extractDirectorsFromList(jsonReader.readFromJson(jsonFilePath)));
+            films=urlReader.getFilmsList();
+            jsonWriter.writeToJson(films, jsonFilePath);
+
+            filmsReadFromJson=jsonReader.readFromJson(jsonFilePath);
+            directors=listOperations.extractDirectorsFromList(filmsReadFromJson);
+            listOperations.printMostPopularDirector(directors);
 
 
         } catch (IOException e) {

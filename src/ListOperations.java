@@ -17,15 +17,16 @@ public class ListOperations {
 
     public Set<Director> printMostPopularDirector(List<Director> directors) {
         Set<Director> mostPopularDirectors = new HashSet<>();
-        int maxNumberOffOskars = 0;
+
+        int maxNumberOffOscars = 0;
         for (Director director : directors
         ) {
             for (Director director2 : directors
             ) {
-                if (director.directorName.equals(director2.directorName) && director.directorLastName.equals(director2.directorLastName)) {
+                if (director.equals(director2)) {
                     director.numberOfOscars++;
-                    if (maxNumberOffOskars < director.numberOfOscars) {
-                        maxNumberOffOskars = director.numberOfOscars;
+                    if (maxNumberOffOscars < director.numberOfOscars) {
+                        maxNumberOffOscars = director.numberOfOscars;
                     }
                 }
             }
@@ -33,7 +34,7 @@ public class ListOperations {
 
         for (Director director : directors
         ) {
-            if (director.numberOfOscars == maxNumberOffOskars)
+            if (director.numberOfOscars == maxNumberOffOscars)
                 mostPopularDirectors.add(director);
         }
         System.out.println("Most popular Directors: " + mostPopularDirectors);
