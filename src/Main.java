@@ -6,7 +6,7 @@ public class Main {
         long beginTime = System.currentTimeMillis();
 
         String url = "https://www.filmsite.org/bestpics4.html";
-        String jsonFilePath = "C:\\Users\\jakub.szczygiel\\IdeaProjects\\Films\\Output.json";
+        String jsonFilePath = "C:\\Users\\Jakub\\IdeaProjects\\Films\\Output.json";
         UrlReader urlReader = new UrlReader(url);
         JsonWriter jsonWriter = new JsonWriter();
         JsonReader jsonReader = new JsonReader();

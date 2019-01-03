@@ -6,11 +6,10 @@ title __SRC's Class Diagram__\n
     class Director {
         + directorName : String
         + directorLastName : String
-        ~ numberOfOscars : int
         + Director()
-        + toString()
         + equals()
         + hashCode()
+        + toString()
     }
   }
   
@@ -27,7 +26,8 @@ title __SRC's Class Diagram__\n
 
   package  {
     class JsonReader {
-        + readFromJson()
+        + readFilmsFromJson()
+        + readDirectorsFromJson()
     }
   }
   
@@ -43,6 +43,9 @@ title __SRC's Class Diagram__\n
     class ListOperations {
         + extractDirectorsFromList()
         + printMostPopularDirector()
+        - fillDirectorsWithNumberOfOscars()
+        - returnMaxNumberOfOscars()
+        - returnDirectorsWithSpecificValueOfOscars()
     }
   }
   
@@ -58,8 +61,12 @@ title __SRC's Class Diagram__\n
     class UrlReader {
         ~ url : String
         ~ films : List<Film>
+        {static} + YEAR_OF_FIRST_FILM_PRODUCTION : int
         + UrlReader()
         + getFilmsList()
+        - returnDirectorString()
+        - hasMoreThanOneLastName()
+        - removeAsterisk()
     }
   }
   
