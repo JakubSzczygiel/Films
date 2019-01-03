@@ -24,10 +24,9 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        finally {
-            long endTime = System.currentTimeMillis();
-            System.out.println("time of program execution: " + (endTime - beginTime) + " ms");
-        }
+        
+        long endTime = System.currentTimeMillis();
+        System.out.println("time of program execution: " + (endTime - beginTime) + " ms");
     }
 
 }
