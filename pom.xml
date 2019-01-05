@@ -8,6 +8,36 @@
     <artifactId>Films</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <name>executable-jar</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <outputDirectory>C:\Users\Jakub\IdeaProjects\Films</outputDirectory>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>false</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <archive>
+                        <manifest>
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
@@ -24,16 +54,5 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
