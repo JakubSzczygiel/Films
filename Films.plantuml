@@ -9,19 +9,19 @@ title __FILMS's Class Diagram__\n
   
 
   package  {
+    class Excel {
+    }
+  }
+  
+
+  package  {
     class Film {
     }
   }
   
 
   package  {
-    class JsonReader {
-    }
-  }
-  
-
-  package  {
-    class JsonWriter {
+    class Json {
     }
   }
   
@@ -39,12 +39,28 @@ title __FILMS's Class Diagram__\n
   
 
   package  {
+    interface Readable {
+    }
+  }
+  
+
+  package  {
     class UrlReader {
     }
   }
   
 
+  package  {
+    interface Writeable {
+    }
+  }
+  
+
+  Excel -up-|> Readable
+  Excel -up-|> Writeable
   Film o-- Director : director
+  Json -up-|> Writeable
+  Json -up-|> Readable
 
 
 right footer

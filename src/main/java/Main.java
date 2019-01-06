@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.util.List;
 
@@ -6,20 +7,12 @@ public class Main {
         long beginTime = System.currentTimeMillis();
 
         String url = "https://www.filmsite.org/bestpics4.html";
-        String jsonFilePath = "C:\\Users\\Jakub\\IdeaProjects\\Films\\Output.json";
-        UrlReader urlReader = new UrlReader(url);
-        JsonWriter jsonWriter = new JsonWriter();
-        JsonReader jsonReader = new JsonReader();
-        ListOperations listOperations = new ListOperations();
-        List<Film> films;
-        List<Director> directorsReadFromJson;
-
+        Json json = new Json();
+        Excel excel = new Excel();
 
         try {
-            films = urlReader.getFilmsList();
-            jsonWriter.writeToJson(films, jsonFilePath);
-            directorsReadFromJson = jsonReader.readDirectorsFromJson(jsonFilePath);
-            listOperations.printMostPopularDirector(directorsReadFromJson);
+            printMostPopularDirectors(url, json, json);
+            printMostPopularDirectors(url, excel, excel);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -27,6 +20,30 @@ public class Main {
 
         long endTime = System.currentTimeMillis();
         System.out.println("time of program execution: " + (endTime - beginTime) + " ms");
+    }
+
+    static void printMostPopularDirectors(String url, Writeable writeable, Readable readable) throws IOException {
+        UrlReader urlReader = new UrlReader(url);
+        ListOperations listOperations = new ListOperations();
+        List<Film> films;
+        List<Director> directorsReadFromFile;
+        List<Film> filmsReadFromFile;
+
+
+        films = urlReader.getFilmsList();
+        writeToFile(writeable, films);
+        filmsReadFromFile = readFromFile(readable);
+        directorsReadFromFile = listOperations.extractDirectorsFromList(filmsReadFromFile);
+        System.out.println(readable.getClass().getName());
+        listOperations.printMostPopularDirector(directorsReadFromFile);
+    }
+
+    static void writeToFile(Writeable fileFormat, List list) throws IOException {
+        fileFormat.write(list);
+    }
+
+    static List readFromFile(Readable fileFormat) throws IOException {
+        return fileFormat.read();
     }
 
 }

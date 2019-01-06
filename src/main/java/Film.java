@@ -10,6 +10,11 @@ public class Film {
         this.director = new Director(directorName, directorLastname);
     }
 
+    public Object[] getObjectArrayFromFilmFields() {
+        Object[] objectArratFromFilmFields = {year, filmName, director};
+        return objectArratFromFilmFields;
+    }
+
     @Override
     public String toString() {
         return year + " | " + filmName + " | " + director + "\n";
