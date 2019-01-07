@@ -11,8 +11,8 @@ public class Main {
         Excel excel = new Excel();
 
         try {
-            printMostPopularDirectors(url, json, json);
-            printMostPopularDirectors(url, excel, excel);
+            findMostPopularDirectors(url, json, json);
+            findMostPopularDirectors(url, excel, excel);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -22,7 +22,7 @@ public class Main {
         System.out.println("time of program execution: " + (endTime - beginTime) + " ms");
     }
 
-    static void printMostPopularDirectors(String url, Writeable writeable, Readable readable) throws IOException {
+    static void findMostPopularDirectors(String url, Writeable writeable, Readable readable) throws IOException {
         UrlReader urlReader = new UrlReader(url);
         ListOperations listOperations = new ListOperations();
         List<Film> films;

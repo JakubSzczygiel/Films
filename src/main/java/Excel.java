@@ -3,7 +3,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -12,8 +11,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Excel implements Readable, Writeable {
 
@@ -21,56 +22,65 @@ public class Excel implements Readable, Writeable {
 
     @Override
     public List read() throws IOException {
-        List<Film> films = new ArrayList<>();
-
+        List<Film> films;
         FileInputStream inputStream = new FileInputStream(new File(EXCEL_FILE_PATH));
-
-        Workbook workbook = new XSSFWorkbook(inputStream);
+        XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rowIterator = sheet.iterator();
 
+        films = getRowsValues(rowIterator);
 
+        workbook.close();
+        inputStream.close();
+        return films;
+    }
+
+    private List<Film> getRowsValues(Iterator<Row> rowIterator) {
+        List<Film> films = new ArrayList<>();
         while (rowIterator.hasNext()) {
-            int filmYear = 0;
-            String filmName = "";
-            String[] director;
-            String directorName = "";
-            String directorLastName = "";
             Row row = rowIterator.next();
             if (row.getRowNum() == 0) {
                 continue;
             }
-
             Iterator<Cell> cellIterator = row.cellIterator();
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                switch (cell.getColumnIndex()) {
-                    case 0:
-                        filmYear = Integer.parseInt(cell.getStringCellValue());
-                        break;
-                    case 1:
-                        filmName = (cell.getStringCellValue());
-                        break;
-                    case 2:
-                        director = cell.getStringCellValue().split(" ");
-                        directorName = director[0];
-                        for (int i = 1; i < director.length; i++) {
-                            if (i != 1) {
-                                directorLastName += " ";
-                            }
-                            directorLastName += director[i];
-                        }
-                        break;
-                }
-            }
-            films.add(new Film(filmYear, filmName, directorName, directorLastName));
+            Map<String, String> film = getCellsValues(cellIterator);
+            films.add(new Film(Integer.parseInt(film.get("filmYear")), film.get("filmName"), film.get("directorName"), film.get("directorLastName")));
         }
-        //System.out.println(films);
-        workbook.close();
-        inputStream.close();
-
         return films;
     }
+
+    private String findDirectorLastName(String[] director) {
+        String directorLastName = "";
+        for (int i = 1; i < director.length; i++) {
+            if (i != 1) {
+                directorLastName += " ";
+            }
+            directorLastName += director[i];
+        }
+        return directorLastName;
+    }
+
+    private Map<String, String> getCellsValues(Iterator<Cell> cellIterator) {
+        Map<String, String> film = new HashMap<>();
+        while (cellIterator.hasNext()) {
+            Cell cell = cellIterator.next();
+            switch (cell.getColumnIndex()) {
+                case 0:
+                    film.put("filmYear", cell.getStringCellValue());
+                    break;
+                case 1:
+                    film.put("filmName", cell.getStringCellValue());
+                    break;
+                case 2:
+                    String[] director = cell.getStringCellValue().split(" ");
+                    film.put("directorName", director[0]);
+                    film.put("directorLastName", findDirectorLastName(director));
+                    break;
+            }
+        }
+        return film;
+    }
+
 
     @Override
     public void write(List<Film> films) throws IOException {
@@ -81,7 +91,7 @@ public class Excel implements Readable, Writeable {
         String[] columnTitles = {"YEAR", "FILM NAME", "DIRECTOR"};
         addColumnTitles(columnTitles, sheet);
         addFilmEntries(sheet, films);
-        adjustColumnWidth(sheet);
+        adjustColumnWidth(columnTitles, sheet);
 
         FileOutputStream outputStream = new FileOutputStream(EXCEL_FILE_PATH);
         workbook.write(outputStream);
@@ -91,7 +101,7 @@ public class Excel implements Readable, Writeable {
     private void addColumnTitles(String[] columnTitles, XSSFSheet sheet) {
         int rowNum = 0;
         int colNum = 0;
-        Row titleRow = sheet.createRow(rowNum++);
+        Row titleRow = sheet.createRow(rowNum);
         CellStyle cellStyle = titleRow.getSheet().getWorkbook().createCellStyle();
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
@@ -116,8 +126,9 @@ public class Excel implements Readable, Writeable {
         }
     }
 
-    private void adjustColumnWidth(XSSFSheet sheet) {
-        for (int i = 0; i < 3; i++)
+    private void adjustColumnWidth(String[] columnTitles, XSSFSheet sheet) {
+        for (int i = 0; i < columnTitles.length; i++) {
             sheet.autoSizeColumn(i);
+        }
     }
 }
