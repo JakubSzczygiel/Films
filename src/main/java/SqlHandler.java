@@ -13,11 +13,9 @@ public class SqlHandler implements Writeable, Readable {
     @Override
     public List read() {
         List<Film> films = new ArrayList<>();
-        Connection connection = null;
         try {
-            connection = createConnection(DATABASE_NAME);
+            Connection connection = createConnection(DATABASE_NAME);
             films = readFilms(connection, TABLE_NAME);
-            dropTable(TABLE_NAME, connection);
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -25,9 +23,9 @@ public class SqlHandler implements Writeable, Readable {
         return films;
     }
 
-    private void dropTable(String tableName, Connection connection) throws SQLException {
+    private void removeTable(String tableName, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
-        statement.executeUpdate(String.format("DROP TABLE %s", tableName));
+        statement.executeUpdate(String.format("DROP TABLE IF EXISTS %s", tableName));
         statement.close();
     }
 
@@ -40,28 +38,19 @@ public class SqlHandler implements Writeable, Readable {
             String filmName = resultSet.getString("filmName");
             String[] director = resultSet.getString("director").split(" ");
             String directorName = director[0];
-            String directorLastName = findDirectorLastName(director);
+            ListOperations listOperation = new ListOperations();
+            String directorLastName = listOperation.findDirectorLastName(director);
             films.add(new Film(filmYear, filmName, directorName, directorLastName));
         }
         statement.close();
         return films;
     }
 
-    private String findDirectorLastName(String[] director) {
-        String directorLastName = "";
-        for (int i = 1; i < director.length; i++) {
-            if (i != 1) {
-                directorLastName += " ";
-            }
-            directorLastName += director[i];
-        }
-        return directorLastName;
-    }
-
     @Override
     public void write(List<Film> films) {
         try {
             Connection connection = createConnection(DATABASE_NAME);
+            removeTable(TABLE_NAME, connection);
             createTableInDatabase(connection, TABLE_NAME);
             addListToDatabase(connection, films, TABLE_NAME);
             connection.close();
@@ -112,18 +101,34 @@ public class SqlHandler implements Writeable, Readable {
         List<Director> directors = new ArrayList<>();
         try {
             Connection connection = createConnection(DATABASE_NAME);
-            getMaxNumberOfOscars(connection);
-
+            int maxNumberOfOscars = getMaxNumberOfOscars(connection);
+            directors = getDirectorsWithVariableNumberOfOscars(connection, maxNumberOfOscars);
+            System.out.println(String.format("Most popular Directors (with %d Oscars) : " + directors, maxNumberOfOscars));
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return directors;
     }
 
-    private void getMaxNumberOfOscars(Connection connection) throws SQLException {
+    private List getDirectorsWithVariableNumberOfOscars(Connection connection, int maxNumberOfOscars) throws SQLException {
+        List directors = new ArrayList();
         Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(String.format("SELECT director, COUNT(director) AS ilosc " +
+                "FROM Films GROUP BY director HAVING ilosc = %d", maxNumberOfOscars));
+        while (resultSet.next()) {
+            directors.add(resultSet.getString("director"));
+        }
+        return directors;
+    }
 
-
+    private int getMaxNumberOfOscars(Connection connection) throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS numberOfOccurance " +
+                "FROM Films GROUP BY director order BY numberOfOccurance " +
+                "DESC LIMIT 1");
+        int maxNumberOfOscars = resultSet.getInt("numberOfOccurance");
+        statement.close();
+        return maxNumberOfOscars;
     }
 
 }

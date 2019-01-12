@@ -19,7 +19,18 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        ///////////////////////////////////////////////////
+        UrlReader urlReader = new UrlReader(url);
+        List<Film> films;
+        try {
+            films = urlReader.getFilmsList();
+            sqlHandler.write(films);
+            System.out.println("Getting directors directly from database");
+            sqlHandler.getDirectorsWithMaxNumberOfOscars();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ////////////////////////////////////////////////////
 
         long endTime = System.currentTimeMillis();
         System.out.println("time of program execution: " + (endTime - beginTime) + " ms");

@@ -23,6 +23,17 @@ public class ListOperations {
         System.out.println("Most popular Directors (with " + maxNumberOfOscars + " Oscars) : " + mostPopularDirectors);
     }
 
+    public String findDirectorLastName(String[] director) {
+        String directorLastName = "";
+        for (int i = 1; i < director.length; i++) {
+            if (i != 1) {
+                directorLastName += " ";
+            }
+            directorLastName += director[i];
+        }
+        return directorLastName;
+    }
+
     private Map<Director, Integer> fillDirectorsWithNumberOfOscars(List<Director> directors) {
         Set<Director> directorsTemp = new HashSet<>();
         Map<Director, Integer> directorMap = new HashMap<>();

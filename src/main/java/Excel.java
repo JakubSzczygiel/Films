@@ -49,16 +49,6 @@ public class Excel implements Readable, Writeable {
         return films;
     }
 
-    private String findDirectorLastName(String[] director) {
-        String directorLastName = "";
-        for (int i = 1; i < director.length; i++) {
-            if (i != 1) {
-                directorLastName += " ";
-            }
-            directorLastName += director[i];
-        }
-        return directorLastName;
-    }
 
     private Map<String, String> getCellsValues(Iterator<Cell> cellIterator) {
         Map<String, String> film = new HashMap<>();
@@ -72,9 +62,10 @@ public class Excel implements Readable, Writeable {
                     film.put("filmName", cell.getStringCellValue());
                     break;
                 case 2:
+                    ListOperations listOperation = new ListOperations();
                     String[] director = cell.getStringCellValue().split(" ");
                     film.put("directorName", director[0]);
-                    film.put("directorLastName", findDirectorLastName(director));
+                    film.put("directorLastName", listOperation.findDirectorLastName(director));
                     break;
             }
         }
