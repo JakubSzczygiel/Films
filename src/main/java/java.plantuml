@@ -16,9 +16,15 @@ title __JAVA's Class Diagram__\n
 
   package  {
     class Excel {
+        {static} ~ EXCEL_FILE_PATH : String
         + read()
-        + readDirectors()
+        - getRowsValues()
+        - findDirectorLastName()
+        - getCellsValues()
         + write()
+        - addColumnTitles()
+        - addFilmEntries()
+        - adjustColumnWidth()
     }
   }
   
@@ -28,6 +34,7 @@ title __JAVA's Class Diagram__\n
         + year : int
         + filmName : String
         + Film()
+        + getObjectArrayFromFilmFields()
         + toString()
     }
   }
@@ -35,9 +42,9 @@ title __JAVA's Class Diagram__\n
 
   package  {
     class Json {
+        {static} ~ JSON_FILE_PATH : String
         + write()
         + read()
-        + readDirectors()
     }
   }
   
@@ -56,6 +63,9 @@ title __JAVA's Class Diagram__\n
   package  {
     class Main {
         {static} + main()
+        {static} ~ findMostPopularDirectors()
+        {static} ~ writeToFile()
+        {static} ~ readFromFile()
     }
   }
   
@@ -63,7 +73,6 @@ title __JAVA's Class Diagram__\n
   package  {
     interface Readable {
         {abstract} + read()
-        {abstract} + readDirectors()
     }
   }
   

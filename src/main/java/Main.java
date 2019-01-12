@@ -10,13 +10,30 @@ public class Main {
         Json json = new Json();
         Excel excel = new Excel();
 
-        try {
+
+       /* try {
             findMostPopularDirectors(url, json, json);
             findMostPopularDirectors(url, excel, excel);
 
         } catch (IOException e) {
             e.printStackTrace();
+        }*/
+
+
+        /////////////////////////////////////////////////////////////
+        // SQL tests
+        UrlReader urlReader = new UrlReader(url);
+        List<Film> films;
+        SqlHandler sqlHandler = new SqlHandler();
+        try {
+            films = urlReader.getFilmsList();
+            sqlHandler.write(films);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        ///////////////////////////////////////////////////////
+
 
         long endTime = System.currentTimeMillis();
         System.out.println("time of program execution: " + (endTime - beginTime) + " ms");
