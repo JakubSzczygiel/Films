@@ -9,30 +9,16 @@ public class Main {
         String url = "https://www.filmsite.org/bestpics4.html";
         Json json = new Json();
         Excel excel = new Excel();
+        SqlHandler sqlHandler = new SqlHandler();
 
-
-       /* try {
+        try {
             findMostPopularDirectors(url, json, json);
             findMostPopularDirectors(url, excel, excel);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-
-        /////////////////////////////////////////////////////////////
-        // SQL tests
-        UrlReader urlReader = new UrlReader(url);
-        List<Film> films;
-        SqlHandler sqlHandler = new SqlHandler();
-        try {
-            films = urlReader.getFilmsList();
-            sqlHandler.write(films);
+            findMostPopularDirectors(url, sqlHandler, sqlHandler);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ///////////////////////////////////////////////////////
 
 
         long endTime = System.currentTimeMillis();
